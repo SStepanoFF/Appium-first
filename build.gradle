@@ -6,7 +6,6 @@ buildscript {
 
 plugins {
     id 'java'
-//    id 'maven-publish'
 }
 
 group = 'org.example'
@@ -14,22 +13,22 @@ version = '1.0-SNAPSHOT'
 sourceCompatibility = 8
 targetCompatibility = 8
 
-test {
-//    doFirst {
-//        systemProperties System.getProperties()
-//    }
-    testLogging.showStandardStreams = true
-//    finalizedBy 'aggregate'
-}
-
 repositories {
     mavenCentral()
     jcenter()
 }
 
+defaultTasks 'clean', 'build'
+
+test {
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation 'io.appium:java-client:7.3.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.6.0')
     testImplementation 'org.hamcrest:hamcrest-all:1.3'
 }
 

@@ -16,14 +16,54 @@ version = '1.0-SNAPSHOT'
 sourceCompatibility = 8
 targetCompatibility = 8
 
+ext {
+    appiumPort = 4723
+}
+
 repositories.addAll(buildscript.repositories)
 
 defaultTasks 'clean', 'build'
 
+gradle.startParameter.continueOnFailure = true
+
+task startAppium() {
+    logger.lifecycle("Checking appium is running!")
+    def request = ["curl", "http://127.0.0.1:$appiumPort/wd/hub/status"].execute()
+    request.waitFor()
+    if(request.exitValue() != 0) {
+        logger.lifecycle("Failed to run test, Appium is not running")
+//        System.exit(1)
+    }
+}
+
 test {
-    systemProperties System.getProperties()
-    testLogging.showStandardStreams = true
+    testLogging {
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+    ignoreFailures = true
+
+    doFirst {
+        systemProperties System.getProperties()
+//        startAppium()
+    }
     useJUnitPlatform()
+
+    testLogging.showStandardStreams = false
+
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            logger.lifecycleEnabled
+            logger.lifecycle "\nTest result: ${result.resultType}"
+            logger.lifecycle "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
 }
 
 dependencies {

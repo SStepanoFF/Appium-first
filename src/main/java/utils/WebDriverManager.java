@@ -6,13 +6,17 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
+@Slf4j
 public class WebDriverManager {
 
     public static WebDriver getDriver(URL serverUrl) {
@@ -29,6 +33,7 @@ public class WebDriverManager {
     }
 
     private static AppiumDriver getIOSDriver(URL serverUrl) {
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "iOS");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13.2.2");
@@ -44,6 +49,7 @@ public class WebDriverManager {
     }
 
     private static AppiumDriver getAndroidDriver(URL serverUrl) {
+        log.info("Configuring Android driver....");
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
 

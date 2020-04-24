@@ -11,28 +11,31 @@ import org.apache.commons.lang3.EnumUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
-@Slf4j
-public class WebDriverManager {
+import static config.SystemVariables.APPIUM_HOST;
 
-    public static WebDriver getDriver(URL serverUrl) {
+@Slf4j
+public final class WebDriverManager {
+
+    private static final String APPIUM_HUB_PATH ="/wd/hub";
+
+    public static WebDriver getDriver() {
         switch (EnumUtils.getEnumIgnoreCase(WebDriverType.class, System.getProperty("driver"))) {
             case ANDROID:
-                return getAndroidDriver(serverUrl);
+                return getAndroidDriver();
             case IOS:
-                return getIOSDriver(serverUrl);
+                return getIOSDriver();
             case WEB:
                 return getWebDriver();
             default:
-                    throw new RuntimeException("Incorrect WebDriver type");
+                throw new RuntimeException("Incorrect WebDriver type");
         }
     }
 
-    private static AppiumDriver getIOSDriver(URL serverUrl) {
+    private static AppiumDriver getIOSDriver() {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "iOS");
@@ -45,10 +48,10 @@ public class WebDriverManager {
         capabilities.setCapability("showXcodeLog", "true");
         capabilities.setCapability("autoAcceptAlert", "true");
 
-        return new IOSDriver(serverUrl, capabilities);
+        return new IOSDriver(getServerUrl(), capabilities);
     }
 
-    private static AppiumDriver getAndroidDriver(URL serverUrl) {
+    private static AppiumDriver getAndroidDriver() {
         log.info("Configuring Android driver....");
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
@@ -63,12 +66,23 @@ public class WebDriverManager {
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
         capabilities.setCapability(MobileCapabilityType.NO_RESET, "true");
 
-        return new AndroidDriver(serverUrl, capabilities);
+        return new AndroidDriver(getServerUrl(), capabilities);
     }
 
     private static WebDriver getWebDriver() {
         System.setProperty("webdriver.chrome.driver", "drivers/mac/chromedriver");
         return new ChromeDriver();
+    }
+
+    private static URL getServerUrl() {
+        URL url = null;
+//        String port
+        try {
+            url = new URL(PropertiesManager.getProperty(APPIUM_HOST)+":6666"+ APPIUM_HUB_PATH);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 
     @Getter

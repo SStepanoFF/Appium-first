@@ -6,12 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.WebDriverManager;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,15 +19,14 @@ public class MobileWebTest {
     private static WebDriver driver;
 
     @BeforeAll
-    public static void setUp() throws MalformedURLException {
+    public static void setUp() {
         log.info("Before test....");
-        URL serverUrl = new URL("http://127.0.0.1:4723/wd/hub");
-        driver= WebDriverManager.getDriver(serverUrl);
+        driver = WebDriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @AfterAll
-    public static void after(){
+    public static void after() {
         driver.quit();
     }
 

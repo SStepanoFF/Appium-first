@@ -38,6 +38,10 @@ public final class WebDriverManager {
         }
     }
 
+    public static WebDriver initDriver(DesiredCapabilities capabilities){
+        return new RemoteWebDriver(getSeleniumGridServerUrl(), capabilities);
+    }
+
     private static RemoteWebDriver getIOSDriver() {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -51,7 +55,7 @@ public final class WebDriverManager {
         capabilities.setCapability("showXcodeLog", "true");
         capabilities.setCapability("autoAcceptAlert", "true");
 
-        return new RemoteWebDriver(getAppiumServerUrl(), capabilities);
+        return new RemoteWebDriver(getSeleniumGridServerUrl(), capabilities);
     }
 
     private static AppiumDriver getAndroidDriver() {
@@ -69,7 +73,7 @@ public final class WebDriverManager {
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
         capabilities.setCapability(MobileCapabilityType.NO_RESET, "true");
 
-        return new AndroidDriver(getAppiumServerUrl(), capabilities);
+        return new AndroidDriver(getSeleniumGridServerUrl(), capabilities);
     }
 
     private static WebDriver getWebDriver() {
@@ -82,7 +86,6 @@ public final class WebDriverManager {
 //        String port
         try {
             url = new URL(PropertiesManager.getProperty(APPIUM_HOST) + ":" + PropertiesManager.getProperty(APPIUM_DEFAULT_PORT) + HUB_PATH);
-            url = new URL("http://192.168.1.14" + ":4444" + HUB_PATH);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -1,12 +1,25 @@
 package utils;
 
 import io.appium.java_client.remote.MobileCapabilityType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-public class MobileDesiredCapabilities {
+import java.util.Arrays;
+
+public final class MobileDesiredCapabilities {
+
+    public static DesiredCapabilities getMobileDesireCap(String phoneName) {
+        switch (DeviceType.getDeviceTypeByName(phoneName)) {
+            case IPHONE_8: return getIPhone8();
+            case PIXEL_XL_ASDK: return getPixelXLASDK();
+            case GOOGLE_PIXEL: return getGooglePixel();
+            case SAMSUNG_GALAXY_X_10: return getSamsungGalaxyS10();
+            default: throw new IllegalArgumentException("unknown device name");
+        }
+    }
 
     private static DesiredCapabilities getIPhone8() {
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "iOS");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13.2.2");
@@ -43,7 +56,7 @@ public class MobileDesiredCapabilities {
         return capabilities;
     }
 
-    private static DesiredCapabilities getPixelGenymotion() {
+    private static DesiredCapabilities getGooglePixel() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "8");
@@ -52,5 +65,20 @@ public class MobileDesiredCapabilities {
         capabilities.setCapability(MobileCapabilityType.NO_RESET, "true");
         capabilities.setCapability("chromedriverExecutable", System.getProperty("user.dir") + "/drivers/mac/80/chromedriver");
         return capabilities;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum DeviceType {
+        IPHONE_8("iPhone 8"),
+        SAMSUNG_GALAXY_X_10("Samsung_Galaxy_S10"),
+        PIXEL_XL_ASDK("Pixel XL ASDK"),
+        GOOGLE_PIXEL("Google Pixel");
+
+        private String name;
+
+        public static DeviceType getDeviceTypeByName(String name) {
+            return Arrays.stream(DeviceType.values()).filter(i-> i.getName().equalsIgnoreCase(name)).findFirst().get();
+        }
     }
 }

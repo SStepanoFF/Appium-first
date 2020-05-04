@@ -1,7 +1,4 @@
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,24 +11,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @Slf4j
-public class MobileWebTest {
+public class BaseTest {
 
-    private static WebDriver driver;
+    protected static WebDriver driver;
 
-    @BeforeAll
+//    @BeforeAll
     public static void setUp() {
         log.info("Before test....");
         driver = WebDriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    @AfterAll
-    public static void after() {
+//    @AfterEach
+    public void after() {
         driver.quit();
     }
 
-    @Test
-    public void testFBIncorrectLogin() {
+//    @Test
+    protected void testFBIncorrectLogin(WebDriver driver) {
 
         driver.get("https://facebook.com");
         driver.findElement(By.cssSelector("[name='email']")).sendKeys("wrong email");

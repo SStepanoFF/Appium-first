@@ -37,6 +37,21 @@ def isAppiumRunning() {
     }
 }
 
+def runSeleniumGrid() {
+    logger.lifecycle("Starting selenium grid.....")
+    exec {
+        workingDir './src/main/resources/scripts'
+        executable './launch_grid.sh'
+//        def proc = ["sh", "launch_grid.sh"].execute()
+//        proc.waitForProcessOutput(System.out, System.err)
+
+//        workingDir scriptDir
+//        executable "./scripts/launch_grid.sh"
+//        args System.getProperty('func')
+//        logger.lifecycle "executed: $executable in dir $workingDir"
+    }
+}
+
 test {
     testLogging {
         showCauses = true
@@ -50,6 +65,7 @@ test {
     doFirst {
         systemProperties System.getProperties()
 //        isAppiumRunning()
+        runSeleniumGrid()
     }
 //    maxParallelForks = 2
 //    forkEvery = 1

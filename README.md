@@ -7,6 +7,10 @@ In Terminal switch to "seleniumGrid" folder
 `% appium --port 4724 --nodeconfig nodeConfigGalaxyS10.json`
 port should be the same as in json config file (in exampl it is nodeConfigGalaxyS10.json)
 
+"launch_grid.sh" responsible for launch Selenium grid and Appium nodes
+
+`% sh src/main/resources/scripts/launch_grid.sh`
+
 ##2. How to run with Gradle
 `% ./gradlew`
 

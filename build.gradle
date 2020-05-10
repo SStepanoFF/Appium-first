@@ -37,7 +37,7 @@ def isAppiumRunning() {
     }
 }
 
-def startSeleniumGrid() {
+def startSeleniumGridAndAppium() {
     logger.lifecycle("Checking is SeleniumGrid running.......")
     def request = ["curl", "http://localhost:4444/wd/hub/status"].execute()
     request.waitFor()
@@ -48,6 +48,20 @@ def startSeleniumGrid() {
         }
 //    wait for nodes been registered
         sleep 10000
+    }
+}
+
+def stopAppiumNodes() {
+    logger.lifecycle("Stopping Appium nodes....")
+    exec {
+        commandLine 'bash', '-c', 'killall -9 node'
+    }
+}
+
+def stopSeleniumGrid() {
+    logger.lifecycle("Stopping Selenium Grid....")
+    exec {
+        commandLine 'curl', 'http://localhost:4444/lifecycle-manager?action=shutdown'
     }
 }
 
@@ -63,8 +77,7 @@ test {
 
     doFirst {
         systemProperties System.getProperties()
-//        isAppiumRunning()
-        startSeleniumGrid()
+        startSeleniumGridAndAppium()
     }
 //    maxParallelForks = 2
 //    forkEvery = 1
@@ -80,6 +93,10 @@ test {
                     "${result.failedTestCount} failed, " +
                     "${result.skippedTestCount} skipped"
         }
+    }
+    doLast {
+        stopAppiumNodes()
+        stopSeleniumGrid()
     }
 }
 

@@ -58,6 +58,13 @@ def stopAppiumNodes() {
     }
 }
 
+def closeTerminalApp() {
+    logger.lifecycle("Stopping Appium nodes....")
+    exec {
+        commandLine 'bash', '-c', 'killall Terminal'
+    }
+}
+
 def stopSeleniumGrid() {
     logger.lifecycle("Stopping Selenium Grid....")
     exec {
@@ -81,6 +88,7 @@ test {
     }
 //    maxParallelForks = 2
 //    forkEvery = 1
+
     useJUnitPlatform()
     testLogging.showStandardStreams = false
 
@@ -95,8 +103,9 @@ test {
         }
     }
     doLast {
-        stopAppiumNodes()
-        stopSeleniumGrid()
+//        stopAppiumNodes()
+//        stopSeleniumGrid()
+        closeTerminalApp()
     }
 }
 

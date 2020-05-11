@@ -19,8 +19,9 @@ port should be the same as in json config file (in exampl it is nodeConfigGalaxy
 `% ./gradlew`
 
 ##4. Jenkins
-###4.1. Start Jenkins
-`brew services start jenkins-lts`
+###4.1. Start/Stop Jenkins
+`brew services start jenkins-lts` - start
+`brew services stop jenkins-lts` - stop
 ###4.2. Jenkins url
 `http://jenkins.sst.com:8080`
 admin

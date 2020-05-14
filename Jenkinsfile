@@ -19,7 +19,8 @@ pipeline {
     stages{
         stage('Start SeleniumGrid and Appium') {
             steps {
-//                sh './src/main/resources/scripts/launch_grid.sh'
+                echo 'start .sh'
+//                sh 'chmod +x ./src/main/resources/scripts/launch_grid.sh'
                 sh 'chmod +x ./src/main/resources/scripts/test.sh'
             }
         }

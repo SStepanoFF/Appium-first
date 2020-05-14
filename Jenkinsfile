@@ -21,7 +21,9 @@ pipeline {
             steps {
                 echo 'start .sh'
 //                sh 'chmod +x ./src/main/resources/scripts/launch_grid.sh'
+                sh 'zsh ./src/main/resources/scripts/test.sh'
                 sh 'chmod +x ./src/main/resources/scripts/test.sh'
+                sh './src/main/resources/scripts/test.sh'
             }
         }
     }

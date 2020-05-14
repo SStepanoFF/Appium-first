@@ -5,9 +5,10 @@ function new_tab() {
   COMMAND=$2
 
 echo 'HELLO......!!!'
-echo $PWD
-#cd $PWD/gridConfig
-java -jar ./gridConfig/selenium-server-standalone-3.141.59.jar -role hub -hubConfig ./gridConfig/hubConfig.json
+echo 'Current folder: ' $PWD
+cd gridConfig
+echo 'Current folder: ' $PWD
+java -jar ./selenium-server-standalone-3.141.59.jar -role hub -hubConfig ./hubConfig.json
 
 #   osascript \
 #   -e "tell application \"Terminal\" to activate" \

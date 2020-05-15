@@ -22,7 +22,8 @@ pipeline {
                 echo 'starting .sh......'
 //                for execution need permissions - execute with zsh or first det 'chmod +x' permission and after execute
 //                sh 'zsh ./src/main/resources/scripts/launch_grid.sh'
-                sh 'zsh ./src/main/resources/scripts/test.sh'
+                sh 'zsh ./src/main/resources/scripts/jenkins_launch_grid.sh'
+                sleep 10
             }
         }
     }

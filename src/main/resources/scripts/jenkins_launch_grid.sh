@@ -10,6 +10,7 @@ echo "Starting ${COMMAND_NAME} .........."
 
 #java -jar ./gridConfig/selenium-server-standalone-3.141.59.jar -role hub -hubConfig ./gridConfig/hubConfig.json > /dev/null 2>&1 &
 
+
 #  > /dev/null 2>&1 &  - execute in background mode
 echo "Executing comand: $COMMAND"
 $COMMAND > /dev/null 2>&1 &

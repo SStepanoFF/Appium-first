@@ -3,6 +3,9 @@
 pipeline {
     agent any
 
+//    poll githab every 1 min to check changes
+    triggers {pollSCM('* * * * *')}
+
     options {
         timestamps()
         timeout(time: 120, unit: 'MINUTES')

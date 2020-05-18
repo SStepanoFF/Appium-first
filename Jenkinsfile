@@ -20,8 +20,7 @@ pipeline {
         stage('Start SeleniumGrid and Appium') {
             steps {
                 echo 'starting .sh......'
-//                for execution need permissions - execute with zsh or first det 'chmod +x' permission and after execute
-//                sh 'zsh ./src/main/resources/scripts/launch_grid.sh'
+//                for execution need permissions - execute with zsh or first set 'chmod +x' permission and after execute
                 sh 'zsh ./src/main/resources/scripts/jenkins_launch_grid.sh'
                 sleep 10
             }

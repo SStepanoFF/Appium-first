@@ -38,5 +38,6 @@ function new_tab() {
 SELENIUM_SERVER_FILE="selenium-server-standalone-3.141.59.jar"
 
 new_tab "Grid" "java -jar $SELENIUM_SERVER_FILE -role hub -hubConfig hubConfig.json"
+sleep 1
 new_tab "Node1-iPhone8" "appium --port 4723 --nodeconfig nodeConfigiPhone8.json --session-override"
 new_tab "Node2-GalaxyS10" "appium --port 4724 --nodeconfig nodeConfigGalaxyS10.json --session-override"

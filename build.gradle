@@ -31,20 +31,25 @@ def isAppiumRunning() {
     logger.lifecycle("Checking is appium running.......")
     def request = ["curl", "http://127.0.0.1:$appiumPort/wd/hub/status"].execute()
     request.waitFor()
-    if(request.exitValue() != 0) {
+    if (request.exitValue() != 0) {
         logger.lifecycle("Failed to run test, Appium is not running.....")
         System.exit(1)
     }
 }
 
-def startSeleniumGridAndAppium() {
+task startSeleniumGridAndAppium() {
     logger.lifecycle("Checking is SeleniumGrid running.......")
     def request = ["curl", "http://localhost:4444/wd/hub/status"].execute()
     request.waitFor()
-    if(request.exitValue() != 0) {
+    if (request.exitValue() != 0) {
         logger.lifecycle("Starting selenium grid.....")
         exec {
-            commandLine 'sh','./src/main/resources/scripts/launch_grid.sh'
+            if (System.getenv('BUILD_NUMBER') == null) {
+                commandLine 'sh', './src/main/resources/scripts/launch_grid.sh'
+            } else {
+                commandLine 'sh', './src/main/resources/scripts/jenkins_launch_grid.sh'
+
+            }
         }
 //    wait for nodes been registered
         sleep 10000
@@ -73,6 +78,7 @@ def stopSeleniumGrid() {
 }
 
 test {
+    dependsOn 'startSeleniumGridAndAppium'
     testLogging {
         showCauses = true
         showExceptions = true
@@ -84,7 +90,7 @@ test {
 
     doFirst {
         systemProperties System.getProperties()
-        startSeleniumGridAndAppium()
+//        startSeleniumGridAndAppium()
     }
 //    maxParallelForks = 2
 //    forkEvery = 1
@@ -103,9 +109,9 @@ test {
         }
     }
     doLast {
-//        stopAppiumNodes()
-//        stopSeleniumGrid()
-        closeTerminalApp()
+        stopAppiumNodes()
+        stopSeleniumGrid()
+//        closeTerminalApp()
     }
 }
 

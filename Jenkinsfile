@@ -26,11 +26,24 @@ pipeline {
 //                for execution need permissions - execute with zsh or first set 'chmod +x' permission and after execute
 //                sh 'zsh ./src/main/resources/scripts/jenkins_launch_grid.sh'
 
+                sh './gradlew startSeleniumGridAndAppium'
+//                sh 'java -jar ./gridConfig/selenium-server-standalone-3.141.59.jar -role hub -hubConfig ./gridConfig/hubConfig.json > /dev/null 2>&1 &'
+//                sleep 5
+//                sh 'appium --port 4723 --nodeconfig ./gridConfig/nodeConfigiPhone8.json --session-override'
+//                sleep 10
+            }
+        }
+        stage('Executing tests') {
+            steps {
+                    echo "current BUILD_NUMBER = ${BUILD_NUMBER}"
+                    echo 'Building & Running tests...'
+                    sh "./gradlew"
+                    echo 'Tests finished!'
 
-                sh 'java -jar ./gridConfig/selenium-server-standalone-3.141.59.jar -role hub -hubConfig ./gridConfig/hubConfig.json > /dev/null 2>&1 &'
-                sleep 5
-                sh 'appium --port 4723 --nodeconfig ./gridConfig/nodeConfigiPhone8.json --session-override'
-                sleep 10
+//                    echo 'Save Allure results '
+//                    stash name: 'allure-results', includes: 'build/reports/allure-results/*' // save allure
+                    echo 'Save Junit results'
+                    stash name: 'junit', includes: 'build/test-results/test/*' // save junit
             }
         }
 
@@ -38,7 +51,25 @@ pipeline {
     post {
         always {
             echo "Stop appium server"
-            sh "killall -9 node"
+            sh "./gradlew -Dfunc=stopAppiumNodes"
+
+            script {
+                try {
+                    unstash 'junit'
+                    sh "ls -la ${pwd()}/build/test-results"
+                    junit 'build/test-results/test/Cucumber*.xml'
+
+                    unstash 'serenity-results'
+                    sh "ls -la ${pwd()}/build/reports"
+                    allure results: [[path: 'build/reports/allure-results']]
+
+                } catch (Throwable ex) {
+                    echo "Failed with $ex"
+                }
+            }
+            echo "Cleaning Jenkins..."
+            cleanWs()
         }
     }
+
 }
